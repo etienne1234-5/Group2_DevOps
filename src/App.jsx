@@ -1,122 +1,168 @@
-import { useState } from 'react'
-import heroImg from './assets/hero.png'
-import reactLogo from './assets/react.svg'
-import viteLogo from './assets/vite.svg'
-import './App.css'
+
+import { useState } from "react";
+import { members } from "./data/members";
+import "./app.css";
 
 function App() {
-  const [count, setCount] = useState(0)
+  const [selectedMember, setSelectedMember] = useState(null);
 
   return (
-    <>
-      <section id="center">
-        <div className="hero">
-          <img src={heroImg} className="base" width="170" height="179" alt="" />
-          <img src={reactLogo} className="framework" alt="React logo" />
-          <img src={viteLogo} className="vite" alt="Vite logo" />
+    <main className="app">
+      {/* Animated background */}
+      <div className="orb orb-one"></div>
+      <div className="orb orb-two"></div>
+
+      {/* Navigation */}
+      <nav className="navbar">
+        <a href="#" className="logo">
+          <span className="logo-icon">G2</span>
+          GROUP TWO
+        </a>
+
+        <a href="#members" className="nav-link">
+          Meet the team <span>↗</span>
+        </a>
+      </nav>
+
+      {/* Hero section */}
+      <section className="hero">
+        <span className="eyebrow">
+          ✦ WELCOME TO OUR CREATIVE SPACE
+        </span>
+
+        <h1>
+          Five minds.
+          <br />
+          <span>One vision.</span>
+        </h1>
+
+        <p className="hero-description">
+          Every person has a story, every idea has a purpose.
+          Get to know the people behind Group 2.
+        </p>
+
+        <a href="#members" className="explore-button">
+          Explore our memos <span>↓</span>
+        </a>
+
+        <div className="hero-note">
+          <span>✳</span> Built with teamwork and creativity.
         </div>
-        <div>
-          <h1>Get started</h1>
-          <p>
-            Edit <code>src/App.jsx</code> and save to test <code>HMR</code>
-          </p>
+      </section>
+
+      {/* Members section */}
+      <section className="members-section" id="members">
+        <div className="section-heading">
+          <div>
+            <span className="eyebrow">THE PEOPLE BEHIND THE IDEAS</span>
+            <h2>Our little universe.</h2>
+          </div>
+
+          <span className="member-count">
+            05 MEMBERS
+          </span>
         </div>
-        <button
-          type="button"
-          className="counter"
-          onClick={() => setCount((count) => count + 1)}
+
+        <div className="memo-grid">
+          {members.map((member, index) => (
+            <article
+              key={member.id}
+              className={`memo-card ${member.color}`}
+              style={{ "--delay": `${index * 0.12}s` }}
+              onClick={() => setSelectedMember(member)}
+              role="button"
+              tabIndex={0}
+              onKeyDown={(event) => {
+                if (event.key === "Enter") {
+                  setSelectedMember(member);
+                }
+              }}
+            >
+              <div className="memo-top">
+                <span className="memo-number">
+                  NO. {member.number}
+                </span>
+                <span className="memo-symbol">
+                  {member.emoji}
+                </span>
+              </div>
+
+              <div className="memo-content">
+                <span className="memo-role">
+                  {member.role}
+                </span>
+
+                <h3>{member.name}</h3>
+
+                <p>"{member.message}"</p>
+              </div>
+
+              <div className="memo-footer">
+                <span>OPEN MEMO</span>
+                <span className="memo-arrow">↗</span>
+              </div>
+            </article>
+          ))}
+        </div>
+      </section>
+
+      {/* Footer */}
+      <footer className="footer">
+        <div className="footer-line"></div>
+        <h2>Better together.</h2>
+        <p>GROUP 2 © 2026 — MADE WITH CREATIVITY.</p>
+      </footer>
+
+      {/* Member popup */}
+      {selectedMember && (
+        <div
+          className="modal-overlay"
+          onClick={() => setSelectedMember(null)}
         >
-          Count is {count}
-        </button>
-      </section>
+          <div
+            className={`modal-card ${selectedMember.color}`}
+            onClick={(event) => event.stopPropagation()}
+          >
+            <button
+              className="close-button"
+              onClick={() => setSelectedMember(null)}
+              aria-label="Close memo"
+            >
+              ×
+            </button>
 
-      <div className="ticks"></div>
+            <span className="memo-number">
+              MEMBER {selectedMember.number}
+            </span>
 
-      <section id="next-steps">
-        <div id="docs">
-          <svg className="icon" role="presentation" aria-hidden="true">
-            <use href="/icons.svg#documentation-icon"></use>
-          </svg>
-          <h2>Documentation</h2>
-          <p>Your questions, answered</p>
-          <ul>
-            <li>
-              <a href="https://vite.dev/" target="_blank">
-                <img className="logo" src={viteLogo} alt="" />
-                Explore Vite
-              </a>
-            </li>
-            <li>
-              <a href="https://react.dev/" target="_blank">
-                <img className="button-icon" src={reactLogo} alt="" />
-                Learn more
-              </a>
-            </li>
-          </ul>
+            <div className="modal-symbol">
+              {selectedMember.emoji}
+            </div>
+
+            <span className="memo-role">
+              {selectedMember.role}
+            </span>
+
+            <h2>{selectedMember.name}</h2>
+
+            <p className="modal-message">
+              "{selectedMember.message}"
+            </p>
+
+            <div className="modal-divider"></div>
+
+            <p className="modal-description">
+              {selectedMember.description}
+            </p>
+
+            <span className="modal-signature">
+              A MEMBER OF GROUP 2 ✦
+            </span>
+          </div>
         </div>
-        <div id="social">
-          <svg className="icon" role="presentation" aria-hidden="true">
-            <use href="/icons.svg#social-icon"></use>
-          </svg>
-          <h2>Connect with us</h2>
-          <p>Join the Vite community</p>
-          <ul>
-            <li>
-              <a href="https://github.com/vitejs/vite" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#github-icon"></use>
-                </svg>
-                GitHub
-              </a>
-            </li>
-            <li>
-              <a href="https://chat.vite.dev/" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#discord-icon"></use>
-                </svg>
-                Discord
-              </a>
-            </li>
-            <li>
-              <a href="https://x.com/vite_js" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#x-icon"></use>
-                </svg>
-                X.com
-              </a>
-            </li>
-            <li>
-              <a href="https://bsky.app/profile/vite.dev" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#bluesky-icon"></use>
-                </svg>
-                Bluesky
-              </a>
-            </li>
-          </ul>
-        </div>
-      </section>
-
-      <div className="ticks"></div>
-      <section id="spacer"></section>
-    </>
-  )
+      )}
+    </main>
+  );
 }
 
-export default App
+export default App;
